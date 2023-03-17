@@ -1,0 +1,135 @@
+.border0 {
+  border: 0;
+}
+.padding0 {
+  padding: 0;
+}
+.margin-right-10 {
+  margin-right: 10px;
+}
+.margin-right-20 {
+  margin-right: 20px;
+}
+
+.minWidth-700 {
+  min-width: 700px !important;
+}
+
+/* flex 弹性布局
+------------------------------- */
+.flex {
+  display: flex;
+}
+.flex-auto {
+  flex: 1;
+  overflow: hidden;
+}
+.flex-center {
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+}
+.flex-margin {
+  margin: auto;
+}
+.flex-warp {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  margin: 0 -5px;
+  .flex-warp-item {
+    padding: 5px;
+    .flex-warp-item-box {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+/* 宽高 100%
+------------------------------- */
+.w100 {
+  width: 100% !important;
+}
+.h100 {
+  height: 100% !important;
+}
+.vh100 {
+  height: 100vh !important;
+}
+.max100vh {
+  max-height: 100vh !important;
+}
+.min100vh {
+  min-height: 100vh !important;
+}
+
+/* cursor 鼠标形状
+------------------------------- */
+// 默认
+.cursor-default {
+  cursor: default !important;
+}
+// 帮助
+.cursor-help {
+  cursor: help !important;
+}
+// 手指
+.cursor-pointer {
+  cursor: pointer !important;
+}
+// 移动
+.cursor-move {
+  cursor: move !important;
+}
+
+/* 常用 flex */
+
+/* 清除浮动 */
+.clearfix::after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+/* 文字单行省略号 */
+.sle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 文字多行省略号 */
+.mle {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* 文字多了自動換行 */
+.break-word {
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+/* scroll bar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: white;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #dddee0;
+  border-radius: 20px;
+  box-shadow: inset 0 0 0 white;
+}
+.global-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
