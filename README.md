@@ -1,14 +1,24 @@
 # Sasaki-Admin
 
-一个为了学习 Vue3 的项目 :joy:
+## 说明
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+一个为了学习 `Vue3` 的项目 😀
 
-## Type Support For `.vue` Imports in TS
+使用技术基于 Vue 3、Pinia、Vue Router、TypeScript、Vite、Element Plus
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+## 开发
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+```bash
+# 克隆项目
+git clone https://github.com/jingdongrui/Sasaki-Admin.git
+# 进入项目目录
+cd Sasaki-Admin.git
+# 安装依赖
+npm i
+# 启动服务
+npm run dev
+# 打包
+npm run build
+```
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+浏览器访问 <http://localhost:9000>
