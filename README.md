@@ -2,8 +2,6 @@
 
 一个为了学习 Vue3 的项目 :joy:
 
-
-
 - [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 
 ## Type Support For `.vue` Imports in TS
