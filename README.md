@@ -12,7 +12,7 @@
 # 克隆项目
 git clone https://github.com/jingdongrui/Sasaki-Admin.git
 # 进入项目目录
-cd Sasaki-Admin.git
+cd Sasaki-Admin
 # 安装依赖
 npm i
 # 启动服务
