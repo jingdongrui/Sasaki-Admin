@@ -2,7 +2,7 @@
 
 一个为了学习 Vue3 的项目 :joy:
 
-## Recommended IDE Setup
+
 
 - [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 
