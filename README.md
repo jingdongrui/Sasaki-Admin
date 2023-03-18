@@ -1,4 +1,4 @@
-# Sasaki-Admin2
+# Sasaki-Admin
 
 ## 说明
 
