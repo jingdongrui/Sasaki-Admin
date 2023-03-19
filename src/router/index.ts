@@ -43,9 +43,6 @@ router.beforeEach(async (to, from, next) => {
   }
   // console.log("公共路由");
 
-  // 验证通过可正常访问
-  const TagNavStore = useTagNavStore();
-  TagNavStore.pushRouteIntoHistoryList(to);
   next();
 });
 

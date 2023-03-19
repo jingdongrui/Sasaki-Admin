@@ -1,7 +1,14 @@
 <script lang="ts" setup>
-import { nextTick, ref } from "vue";
 import { useTag } from "./hook/useTag";
-import { ElInput } from "element-plus";
+
+import { nextTick, ref, watch, onMounted } from "vue";
+import { useTagNavStore } from "@/store/modules/tagNav";
+import { RouteLocationNormalized, useRoute, useRouter } from "vue-router";
+
+const tagList = ref<RouteLocationNormalized[]>([]);
+const router = useRouter();
+const route = useRoute();
+const TagNavStore = useTagNavStore();
 
 const {
   currentIndex,
@@ -13,24 +20,35 @@ const {
   leaveCloseIcon
 } = useTag();
 
-// 是否鼠标移在上面
-let isMouseHover = ref<boolean>(false);
-const dynamicTags = ref([
-  "Tag 1",
-  "Tag 2",
-  "Tag 3",
-  "Tag 3",
-  "Tag 3",
-  "Tag s的算法似懂非懂发放ss3",
-  "Tag 3",
-  "Tag 3",
-  "Tag 3",
-  "Tag 3",
-  "Tag 3",
-  "Tag 3",
-  "Tag 3",
-  "Tag 3"
-]);
+onMounted(() => {
+  // console.log(route);
+  // console.log(router);
+  // console.log(TagNavStore);
+});
+
+// const handleRouteClick = (route: RouteLocationNormalized) => {
+//   if (route.name !== route.value.name) {
+//     router.push(route);
+//   }
+// };
+watch(
+  () => route,
+  (to, from) => {
+    console.log(router.getRoutes());
+    // console.log(to.name);
+    // console.log(from.name);
+    // if (to.name) {
+    //   TagNavStore.addTag(to);
+    // }
+    // if (from.name) {
+    //   TagNavStore.removeTag(from);
+    // }
+  },
+  {
+    deep: true
+    // immediate: true
+  }
+);
 </script>
 <template>
   <div class="tags-view">
@@ -39,7 +57,7 @@ const dynamicTags = ref([
       <div class="tags">
         <div
           :class="`scroll-item ${currentIndex == index ? 'is-active-scroll-item' : ''}`"
-          v-for="(tag, index) in dynamicTags"
+          v-for="(tag, index) in tagList"
           :key="index"
           @mouseenter="enterNavTag(index)"
           @mouseleave="leaveNavTag(index)"
