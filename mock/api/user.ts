@@ -58,8 +58,7 @@ export default [
                 component: "/system/menu/index",
                 meta: {
                   title: "用户管理",
-                  icon: "ssk-user",
-                  isAffix: true
+                  icon: "ssk-user"
                 }
               },
               {
@@ -68,8 +67,7 @@ export default [
                 component: "/system/role/index",
                 meta: {
                   title: "部门管理",
-                  icon: "ssk-team",
-                  isAffix: true
+                  icon: "ssk-team"
                 }
               }
             ]
@@ -83,13 +81,13 @@ export default [
               {
                 path: "/components/component1",
                 name: "componentsComponent1",
-                meta: { title: "component1", icon: "ssk-HTML", isAffix: true },
+                meta: { title: "component1", icon: "ssk-HTML" },
                 component: "/system/role/index"
               },
               {
                 path: "/components/component2",
                 name: "componentsComponent2",
-                meta: { title: "component2", icon: "ssk-apple", isAffix: true },
+                meta: { title: "component2", icon: "ssk-apple" },
                 component: "/system/role/index"
               }
             ]
@@ -100,8 +98,7 @@ export default [
             component: "/test/index",
             meta: {
               title: "Test",
-              icon: "ssk-HTML",
-              isAffix: true
+              icon: "ssk-HTML"
             }
           }
         ]

@@ -5,19 +5,16 @@ import { RouteLocationNormalized, useRouter } from "vue-router";
 export const useTagNavStore = defineStore({
   id: "tagNavStore",
   state: () => ({
-    tagNavList: [] as TagNavItem[]
+    tagNavList: [] as Menu[]
   }),
   actions: {
     /**
      * 添加标签
      * @param route
      */
-    addTag(route: RouteLocationNormalized) {
-      // 解构后失去响应式;
-      const { path, meta } = route;
-      // console.log(isRef(route));
-      if (!this.tagNavList.some(item => item.path === route.path)) {
-        this.tagNavList.push({ path, meta });
+    addTag(tag: Menu) {
+      if (!this.tagNavList.some(item => item.path === tag.path)) {
+        this.tagNavList.push(tag);
       }
     },
     /**

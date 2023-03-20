@@ -4,9 +4,11 @@ import { Close } from "@element-plus/icons-vue";
 
 import { nextTick, ref, watch, onMounted, computed } from "vue";
 import { useTagNavStore } from "@/store/modules/tagNav";
+import { useUserStore } from "@/store/modules/user";
 import { RouteLocationNormalized, useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
+const UserStore = useUserStore();
 const TagNavStore = useTagNavStore();
 // const tagList = ref<TagNavItem[]>([]);
 
@@ -24,8 +26,8 @@ let translateX = ref("0px");
 // });
 
 onMounted(async () => {
-  // console.log(scrollContainerRef.value.offsetWidth);
-  // console.log(tagsRef.value.offsetWidth);
+  initTag();
+  addTag();
 
   window.addEventListener("resize", () => {
     // console.log("resize触发了");
@@ -39,13 +41,31 @@ onMounted(async () => {
   await nextTick();
   handleWidthHeight();
 });
+// 需要一开始就固定在TagView组件上的
+const filterAffixTags = (routes: any) => {
+  let tags: Menu[] = [];
+  routes.forEach((element: Menu) => {
+    if (element.meta && element.meta.isAffix) {
+      tags.push(element);
+    }
+  });
+  return tags;
+};
+// 初始化
+const initTag = () => {
+  const affixTags = filterAffixTags(UserStore.flatMenuListGetter);
+  affixTags.forEach(element => {
+    TagNavStore.addTag(element);
+  });
+};
 
-const handleRouteClick = (tagItem: TagNavItem) => {
-  if (route.path !== tagItem.path) {
-    router.push({ path: tagItem.path });
+const addTag = () => {
+  const target = UserStore.flatMenuListGetter.find(element => element.name == route.name);
+  if (target) {
+    TagNavStore.addTag(target);
   }
 };
-// 删除标签
+
 const deleteTag = (tagItem: TagNavItem) => {
   // 需要删除项的下标
   const index = TagNavStore.tagNavList.findIndex(item => item.path === tagItem.path);
@@ -60,18 +80,22 @@ const deleteTag = (tagItem: TagNavItem) => {
   }
 };
 const handleWidthHeight = () => {
-  console.log(tagsRef.value);
+  // console.log(tagsRef.value);
+};
+const handleRouteClick = (tagItem: TagNavItem) => {
+  if (route.path !== tagItem.path) {
+    router.push({ path: tagItem.path });
+  }
 };
 watch(
   () => route,
   to => {
     if (to.path) {
-      TagNavStore.addTag(to);
+      // TagNavStore.addTag(to);
     }
   },
   {
-    deep: true,
-    immediate: true
+    deep: true
   }
 );
 </script>
