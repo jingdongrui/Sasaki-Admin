@@ -1,6 +1,5 @@
 import { nextTick, ref } from "vue";
 export const useTag = () => {
-
   const currentIndex = ref(-1);
   const currentIcon = ref("ssk-close-circle");
   const iconSize = ref("12");
@@ -28,5 +27,5 @@ export const useTag = () => {
     leaveNavTag,
     enterCloseIcon,
     leaveCloseIcon
-  }
-}
+  };
+};

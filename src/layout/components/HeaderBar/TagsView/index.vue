@@ -1,80 +1,103 @@
 <script lang="ts" setup>
 import { useTag } from "./hook/useTag";
+import { Close } from "@element-plus/icons-vue";
 
-import { nextTick, ref, watch, onMounted } from "vue";
+import { nextTick, ref, watch, onMounted, computed } from "vue";
 import { useTagNavStore } from "@/store/modules/tagNav";
 import { RouteLocationNormalized, useRoute, useRouter } from "vue-router";
-
-const tagList = ref<RouteLocationNormalized[]>([]);
 const router = useRouter();
 const route = useRoute();
 const TagNavStore = useTagNavStore();
+// const tagList = ref<TagNavItem[]>([]);
 
-const {
-  currentIndex,
-  currentIcon,
-  iconSize,
-  enterNavTag,
-  leaveNavTag,
-  enterCloseIcon,
-  leaveCloseIcon
-} = useTag();
+const scrollContainerRef = ref();
+const tagsRef = ref();
+let translateX = ref("0px");
+// let translateX = computed(() => {
+//   if (scrollContainerRef.value.offsetWidth - tagsRef.value.offsetWidth > 0) {
+//     return "0px";
+//   } else {
+//     let delta = scrollContainerRef.value.offsetWidth - tagsRef.value.offsetWidth;
+//     console.log("ji", delta);
+//     return delta + "px";
+//   }
+// });
 
-onMounted(() => {
-  // console.log(route);
-  // console.log(router);
-  // console.log(TagNavStore);
+onMounted(async () => {
+  // console.log(scrollContainerRef.value.offsetWidth);
+  // console.log(tagsRef.value.offsetWidth);
+
+  window.addEventListener("resize", () => {
+    // console.log("resize触发了");
+    // let delta = scrollContainerRef.value.offsetWidth - tagsRef.value.offsetWidth;
+    // if (delta > 0) {
+    //   translateX.value = "0px";
+    // } else {
+    //   translateX.value = delta + "px";
+    // }
+  });
+  await nextTick();
+  handleWidthHeight();
 });
 
-// const handleRouteClick = (route: RouteLocationNormalized) => {
-//   if (route.name !== route.value.name) {
-//     router.push(route);
-//   }
-// };
+const handleRouteClick = (tagItem: TagNavItem) => {
+  if (route.path !== tagItem.path) {
+    router.push({ path: tagItem.path });
+  }
+};
+// 删除标签
+const deleteTag = (tagItem: TagNavItem) => {
+  // 需要删除项的下标
+  const index = TagNavStore.tagNavList.findIndex(item => item.path === tagItem.path);
+  // 判断点击删除按钮传过来的项是否为当前路由所在的项
+  if (tagItem.path === route.path) {
+    TagNavStore.removeTag(tagItem, index);
+    // 删除后路由跳转到前一项
+    let lastItem = TagNavStore.tagNavList[index - 1];
+    router.push({ path: lastItem.path });
+  } else {
+    TagNavStore.removeTag(tagItem, index);
+  }
+};
+const handleWidthHeight = () => {
+  console.log(tagsRef.value);
+};
 watch(
   () => route,
-  (to, from) => {
-    console.log(router.getRoutes());
-    // console.log(to.name);
-    // console.log(from.name);
-    // if (to.name) {
-    //   TagNavStore.addTag(to);
-    // }
-    // if (from.name) {
-    //   TagNavStore.removeTag(from);
-    // }
+  to => {
+    if (to.path) {
+      TagNavStore.addTag(to);
+    }
   },
   {
-    deep: true
-    // immediate: true
+    deep: true,
+    immediate: true
   }
 );
 </script>
 <template>
   <div class="tags-view">
     <div class="arrow-left"><SvgIcon name="ssk-left"></SvgIcon></div>
-    <div class="scroll-container">
-      <div class="tags">
+    <div class="scroll-container" ref="scrollContainerRef">
+      <div class="tags" ref="tagsRef">
         <div
-          :class="`scroll-item ${currentIndex == index ? 'is-active-scroll-item' : ''}`"
-          v-for="(tag, index) in tagList"
+          :class="`scroll-item ${route.path === tagItem.path ? 'activeItem' : ''}`"
+          v-for="(tagItem, index) in TagNavStore.tagNavList"
           :key="index"
-          @mouseenter="enterNavTag(index)"
-          @mouseleave="leaveNavTag(index)"
+          :ref="'dynamic' + index"
+          @click="handleRouteClick(tagItem)"
         >
-          <a>{{ tag }}</a>
+          <div class="mark" v-if="route.path === tagItem.path"></div>
 
-          <!-- <div v-show="currentIndex == index" class="close-icon"> -->
-          <!--  -->
-          <!-- is-active-close-icon -->
+          <a>{{ tagItem.meta.title }}</a>
+
           <SvgIcon
-            v-if="currentIndex == index"
-            :class="`${currentIndex == index ? 'close-icon' : ''} `"
-            @mouseenter="enterCloseIcon()"
-            @mouseleave="leaveCloseIcon()"
-            :name="currentIcon"
-            :size="iconSize"
-            color="#409EFF"
+            v-if="index !== 0"
+            class="close-icon"
+            @click.stop="deleteTag(tagItem)"
+            name="ssk-close-circle-fill"
+            size="16"
+            color="#909399"
           />
         </div>
       </div>
@@ -99,12 +122,17 @@ watch(
 
     .tags {
       display: flex;
+      width: fit-content;
+
+      transform: translateX(v-bind(translateX));
 
       &:first-child {
         margin-left: 5px;
       }
 
       .scroll-item {
+        // line-height: 29px;
+        // position: relative;
         transition: all 0.2s;
         height: 29px;
         margin-right: 5px;
@@ -112,19 +140,22 @@ watch(
         border-radius: 3px;
         cursor: pointer;
         box-shadow: 0 0 1px #888;
-        line-height: 29px;
-        position: relative;
+        display: flex;
+        align-items: center;
+
+        float: left;
 
         a {
           padding: 0 4px;
         }
         .close-icon {
           cursor: pointer;
-          position: absolute;
-          top: 50%;
-          transform: translate(-40%, -50%);
-          transition: all 0.3s;
-          transform: translate(0, -50%);
+          margin-left: 3px;
+          // position: absolute;
+          // top: 50%;
+          // transform: translate(-40%, -50%);
+          // transition: all 0.3s;
+          // transform: translate(0, -50%);
         }
       }
       .is-active-scroll-item {
@@ -148,5 +179,14 @@ watch(
     border-right: 0.5px solid #ccc;
     box-shadow: -5px 0 5px -6px #ccc;
   }
+}
+.activeItem {
+  border: 1px dashed #409eff;
+}
+.mark {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #409eff;
 }
 </style>

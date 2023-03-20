@@ -8,21 +8,23 @@ declare interface Menu {
   name: string;
   component?: string | (() => Promise<any>);
   redirect?: string;
-  meta: {
-    title: string;
-    // 图标
-    icon?: string;
-    // 是否为默认活跃路由
-    isActivePath?: boolean;
-    // 是否显示在tag导航栏
-    isAffix?: boolean;
-    // 是否缓存
-    isKeepAlive?: boolean;
-    // isLink?: string;
-    // isHide?: boolean;
-    // isFull?: boolean;
-  };
+  meta: RouteMeta;
   children?: Menu[];
+}
+declare interface RouteMeta {
+  // name
+  title: string;
+  // 图标
+  icon?: string;
+  // 是否为默认活跃路由
+  isActivePath?: boolean;
+  // 是否显示在tag导航栏
+  isAffix?: boolean;
+  // 是否缓存
+  isKeepAlive?: boolean;
+  // isLink?: string;
+  // isHide?: boolean;
+  // isFull?: boolean;
 }
 
 // 通知数据
@@ -48,4 +50,10 @@ declare namespace NoticeType {
       }
     ];
   }
+}
+
+// TagNav
+declare interface TagNavItem {
+  path: string;
+  meta: any;
 }
