@@ -2,7 +2,7 @@
 import { useTag } from "./hook/useTag";
 import { Close } from "@element-plus/icons-vue";
 
-import { nextTick, ref, watch, onMounted, computed } from "vue";
+import { nextTick, ref, watch, onMounted, computed, getCurrentInstance } from "vue";
 import { useTagNavStore } from "@/store/modules/tagNav";
 import { useUserStore } from "@/store/modules/user";
 import { RouteLocationNormalized, useRoute, useRouter } from "vue-router";
@@ -10,37 +10,59 @@ const router = useRouter();
 const route = useRoute();
 const UserStore = useUserStore();
 const TagNavStore = useTagNavStore();
+const instance = getCurrentInstance();
 // const tagList = ref<TagNavItem[]>([]);
 
 const scrollContainerRef = ref();
 const tagsRef = ref();
-let translateX = ref("0px");
-// let translateX = computed(() => {
-//   if (scrollContainerRef.value.offsetWidth - tagsRef.value.offsetWidth > 0) {
-//     return "0px";
-//   } else {
-//     let delta = scrollContainerRef.value.offsetWidth - tagsRef.value.offsetWidth;
-//     console.log("ji", delta);
-//     return delta + "px";
-//   }
-// });
+const TagsTranslateX = ref("0px");
+// 当前活跃tag的index
+const currentActiveTagIndex = ref(-1);
 
 onMounted(async () => {
   initTag();
   addTag();
 
   window.addEventListener("resize", () => {
-    // console.log("resize触发了");
-    // let delta = scrollContainerRef.value.offsetWidth - tagsRef.value.offsetWidth;
-    // if (delta > 0) {
-    //   translateX.value = "0px";
-    // } else {
-    //   translateX.value = delta + "px";
-    // }
+    // 文档视图变化，tag-nav位置调整
+    handleTagsLocation();
   });
   await nextTick();
-  handleWidthHeight();
+  // 初始位置设置
+  handleTagsLocation();
 });
+// tag-nav的位置
+const handleTagsLocation = () => {
+  let delta = scrollContainerRef.value.offsetWidth - tagsRef.value.offsetWidth;
+  let currentIndexRefSet = instance?.refs["dynamic" + currentActiveTagIndex.value] as HTMLElement[];
+  let currentIndexRef = currentIndexRefSet[0];
+
+  // console.log(tagsRef.value.offsetWidth - currentIndexRef.offsetLeft);
+
+  if (delta > 0) {
+    // tags未被遮挡，不需要移动
+    TagsTranslateX.value = "0px";
+  } else {
+    // tags宽度大于容器宽度，超出被hidden
+    TagsTranslateX.value =
+      delta +
+      tagsRef.value.offsetWidth -
+      currentIndexRef.offsetLeft -
+      currentIndexRef.offsetWidth +
+      "px";
+    // console.log(tagsRef.value.offsetParent);
+    // console.log(tagsRef.value);
+    // console.log(tagsRef.value.offsetLeft);
+  }
+};
+
+const isActive = (tagItem: Menu, currentIndex: number) => {
+  if (route.path === tagItem.path) {
+    currentActiveTagIndex.value = currentIndex;
+  }
+  return route.path === tagItem.path;
+};
+
 // 需要一开始就固定在TagView组件上的
 const filterAffixTags = (routes: any) => {
   let tags: Menu[] = [];
@@ -66,7 +88,7 @@ const addTag = () => {
   }
 };
 
-const deleteTag = (tagItem: TagNavItem) => {
+const deleteTag = (tagItem: Menu) => {
   // 需要删除项的下标
   const index = TagNavStore.tagNavList.findIndex(item => item.path === tagItem.path);
   // 判断点击删除按钮传过来的项是否为当前路由所在的项
@@ -79,25 +101,15 @@ const deleteTag = (tagItem: TagNavItem) => {
     TagNavStore.removeTag(tagItem, index);
   }
 };
-const handleWidthHeight = () => {
-  // console.log(tagsRef.value);
-};
-const handleRouteClick = (tagItem: TagNavItem) => {
+
+const handleTagClick = (tagItem: Menu) => {
   if (route.path !== tagItem.path) {
     router.push({ path: tagItem.path });
   }
 };
-watch(
-  () => route,
-  to => {
-    if (to.path) {
-      // TagNavStore.addTag(to);
-    }
-  },
-  {
-    deep: true
-  }
-);
+watch(route, () => {
+  addTag();
+});
 </script>
 <template>
   <div class="tags-view">
@@ -109,9 +121,9 @@ watch(
           v-for="(tagItem, index) in TagNavStore.tagNavList"
           :key="index"
           :ref="'dynamic' + index"
-          @click="handleRouteClick(tagItem)"
+          @click="handleTagClick(tagItem)"
         >
-          <div class="mark" v-if="route.path === tagItem.path"></div>
+          <div class="mark" v-if="isActive(tagItem, index)"></div>
 
           <a>{{ tagItem.meta.title }}</a>
 
@@ -143,12 +155,12 @@ watch(
     padding: 5px 0;
     // position: relative;
     white-space: nowrap;
-
+    position: relative;
+    // padding: 5px;
     .tags {
       display: flex;
       width: fit-content;
-
-      transform: translateX(v-bind(translateX));
+      transform: translateX(v-bind(TagsTranslateX));
 
       &:first-child {
         margin-left: 5px;
