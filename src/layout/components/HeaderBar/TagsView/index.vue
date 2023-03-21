@@ -15,7 +15,7 @@ const instance = getCurrentInstance();
 
 const scrollContainerRef = ref();
 const tagsRef = ref();
-const TagsTranslateX = ref("0px");
+const TagsTranslateX = ref(0);
 // 当前活跃tag的index
 const currentActiveTagIndex = ref(-1);
 
@@ -23,37 +23,19 @@ onMounted(async () => {
   initTag();
   addTag();
 
-  window.addEventListener("resize", () => {
-    // 文档视图变化，tag-nav位置调整
-    handleTagsLocation();
-  });
+  // window.addEventListener("resize", () => {
+  //   // 文档视图变化，tag-nav位置调整
+  //   handleTagsLocation();
+  // });
   await nextTick();
   // 初始位置设置
-  handleTagsLocation();
+  // handleTagsLocation();
 });
 // tag-nav的位置
 const handleTagsLocation = () => {
   let delta = scrollContainerRef.value.offsetWidth - tagsRef.value.offsetWidth;
   let currentIndexRefSet = instance?.refs["dynamic" + currentActiveTagIndex.value] as HTMLElement[];
   let currentIndexRef = currentIndexRefSet[0];
-
-  // console.log(tagsRef.value.offsetWidth - currentIndexRef.offsetLeft);
-
-  if (delta > 0) {
-    // tags未被遮挡，不需要移动
-    TagsTranslateX.value = "0px";
-  } else {
-    // tags宽度大于容器宽度，超出被hidden
-    TagsTranslateX.value =
-      delta +
-      tagsRef.value.offsetWidth -
-      currentIndexRef.offsetLeft -
-      currentIndexRef.offsetWidth +
-      "px";
-    // console.log(tagsRef.value.offsetParent);
-    // console.log(tagsRef.value);
-    // console.log(tagsRef.value.offsetLeft);
-  }
 };
 
 const isActive = (tagItem: Menu, currentIndex: number) => {
@@ -115,28 +97,30 @@ watch(route, () => {
   <div class="tags-view">
     <div class="arrow-left"><SvgIcon name="ssk-left"></SvgIcon></div>
     <div class="scroll-container" ref="scrollContainerRef">
-      <div class="tags" ref="tagsRef">
-        <div
-          :class="`scroll-item ${route.path === tagItem.path ? 'activeItem' : ''}`"
-          v-for="(tagItem, index) in TagNavStore.tagNavList"
-          :key="index"
-          :ref="'dynamic' + index"
-          @click="handleTagClick(tagItem)"
-        >
-          <div class="mark" v-if="isActive(tagItem, index)"></div>
+      <el-scrollbar>
+        <div class="tags" ref="tagsRef">
+          <div
+            :class="`scroll-item ${route.path === tagItem.path ? 'activeItem' : ''}`"
+            v-for="(tagItem, index) in TagNavStore.tagNavList"
+            :key="index"
+            :ref="'dynamic' + index"
+            @click="handleTagClick(tagItem)"
+          >
+            <div class="mark" v-if="isActive(tagItem, index)"></div>
 
-          <a>{{ tagItem.meta.title }}</a>
+            <a>{{ tagItem.meta.title }}</a>
 
-          <SvgIcon
-            v-if="index !== 0"
-            class="close-icon"
-            @click.stop="deleteTag(tagItem)"
-            name="ssk-close-circle-fill"
-            size="16"
-            color="#909399"
-          />
+            <SvgIcon
+              v-if="index !== 0"
+              class="close-icon"
+              @click.stop="deleteTag(tagItem)"
+              name="ssk-close-circle-fill"
+              size="16"
+              color="#909399"
+            />
+          </div>
         </div>
-      </div>
+      </el-scrollbar>
     </div>
     <div class="arrow-right"><SvgIcon name="ssk-right"></SvgIcon></div>
   </div>
@@ -155,12 +139,12 @@ watch(route, () => {
     padding: 5px 0;
     // position: relative;
     white-space: nowrap;
-    position: relative;
+    // position: relative;
     // padding: 5px;
     .tags {
       display: flex;
       width: fit-content;
-      transform: translateX(v-bind(TagsTranslateX));
+      transform: translateX(v-bind(TagsTranslateX + "px"));
 
       &:first-child {
         margin-left: 5px;
@@ -168,14 +152,15 @@ watch(route, () => {
 
       .scroll-item {
         // line-height: 29px;
-        // position: relative;
+
         transition: all 0.2s;
         height: 29px;
         margin-right: 5px;
         padding: 0 8px;
         border-radius: 3px;
         cursor: pointer;
-        box-shadow: 0 0 1px #888;
+        // box-shadow: 0 0 1px #888;
+        border: 1px solid #c2c2c2;
         display: flex;
         align-items: center;
 
@@ -217,7 +202,7 @@ watch(route, () => {
   }
 }
 .activeItem {
-  border: 1px dashed #409eff;
+  border: 1px dashed #409eff !important;
 }
 .mark {
   width: 10px;
