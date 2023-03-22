@@ -57,3 +57,7 @@ declare interface TagNavItem {
   path: string;
   meta: any;
 }
+// 鼠标滚轮滚动类型
+// declare interface WheelEventType extends WheelEvent {
+// 	wheelDelta: number;
+// }
