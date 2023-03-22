@@ -19,21 +19,17 @@ const tagsRef = ref();
 const TagsTranslateX = ref(0);
 // 当前活跃tag的index
 const currentActiveTagIndex = ref(-1);
-// v-if="isShowLeftRightArrow"
 // 是否显示左右箭头
-const isShowLeftRightArrow = ref(false);
-// computed(
-//   () => scrollContainerRef.value.wrapRef.offsetWidth < tagsRef.value.offsetWidth
-// );
+const isShowLeftRightArrow = ref(true);
+
+const visibleContextMenu = ref(false);
+const contextMenuLeft = ref(0);
+const contextMenuTop = ref(0);
 
 onMounted(async () => {
   await nextTick();
   initTag();
   addTag();
-  // window.addEventListener("resize", () => {
-  //   isShowLeftRightArrow.value =
-  //     scrollContainerRef.value.wrapRef.offsetWidth < tagsRef.value.offsetWidth ? true : false;
-  // });
   // tag初始位置设置
   handleTagsLocation();
 });
@@ -117,9 +113,6 @@ const addTag = () => {
   const target = UserStore.flatMenuListGetter.find(element => element.name == route.name);
   if (target) {
     TagNavStore.addTag(target);
-    // 添加tag后，判断是否显示左右箭头
-    // isShowLeftRightArrow.value =
-    //   scrollContainerRef.value.wrapRef.offsetWidth < tagsRef.value.offsetWidth ? true : false;
   }
 };
 
@@ -147,9 +140,27 @@ watch(route, () => {
   addTag();
   handleTagsLocation();
 });
+watch(visibleContextMenu, value => {
+  if (value) {
+    document.body.addEventListener("click", closeContextMenu);
+  } else {
+    document.body.removeEventListener("click", closeContextMenu);
+  }
+});
+const openContextMenu = (v: Menu, e: MouseEvent) => {
+  visibleContextMenu.value = true;
+  // console.log(v, e.x);
+  const { clientX, clientY } = e;
+  console.log("clientX", clientX);
+  console.log("clientY", clientY);
+  contextMenuLeft.value = clientX;
+  contextMenuTop.value = clientY;
+};
+const closeContextMenu = () => {
+  visibleContextMenu.value = false;
+};
 </script>
 <template>
-  {{ isShowLeftRightArrow }}
   <div class="tags-view">
     <button v-if="isShowLeftRightArrow" class="arrow-left" @click="clickScrollToLeft">
       <SvgIcon name="ssk-left"></SvgIcon>
@@ -163,6 +174,7 @@ watch(route, () => {
           v-for="(tagItem, index) in TagNavStore.tagNavList"
           :key="index"
           @click="handleTagClick(tagItem)"
+          @contextmenu.prevent="openContextMenu(tagItem, $event)"
         >
           <div class="mark" v-if="isActive(tagItem, index)"></div>
 
@@ -183,6 +195,17 @@ watch(route, () => {
     <button v-if="isShowLeftRightArrow" class="arrow-right" @click="clickScrollToRight">
       <SvgIcon name="ssk-right"></SvgIcon>
     </button>
+
+    <ul
+      v-show="visibleContextMenu"
+      :style="{ left: contextMenuLeft + 'px', top: contextMenuTop + 'px' }"
+      class="contextmenu"
+    >
+      <li><SvgIcon name="ssk-reload" size="14"></SvgIcon><span>刷新</span></li>
+      <li><SvgIcon name="ssk-close" size="14"></SvgIcon><span>关闭</span></li>
+      <li><SvgIcon name="ssk-close-circle" size="14"></SvgIcon><span>关闭其他</span></li>
+      <li><SvgIcon name="ssk-logout" size="14"></SvgIcon><span>关闭全部</span></li>
+    </ul>
   </div>
 </template>
 
@@ -219,8 +242,6 @@ watch(route, () => {
         border: 1px solid #c2c2c2;
         display: flex;
         align-items: center;
-
-        float: left;
 
         a {
           padding: 0 4px;
@@ -263,6 +284,33 @@ watch(route, () => {
   height: 10px;
   border-radius: 50%;
   background-color: #409eff;
+}
+.contextmenu {
+  margin: 0;
+  background: #fff;
+  z-index: 3000;
+  position: absolute;
+  list-style-type: none;
+  padding: 5px 0;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #333;
+  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
+  li {
+    margin: 0;
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    span {
+      margin: 0 0 0 10px;
+    }
+    &:hover {
+      background: #eee;
+    }
+  }
 }
 :deep(.el-scrollbar__thumb) {
   background: transparent;
