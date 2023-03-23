@@ -119,28 +119,28 @@ export default [
           name: "通知",
           list: [
             {
-              avatar: "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF",
+              avatar: "https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png",
               title: "你收到了 12 份新周报",
               datetime: "一年前",
               description: "",
               type: "1"
             },
             {
-              avatar: "https://t7.baidu.com/it/u=1517419723,1472324058&fm=193&f=GIF",
+              avatar: "https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png",
               title: "你推荐的 前端 已通过第三轮面试",
               datetime: "一年前",
               description: "",
               type: "1"
             },
             {
-              avatar: "https://t7.baidu.com/it/u=1517419723,1472324058&fm=193&f=GIF",
+              avatar: "https://gw.alipayobjects.com/zos/rmsportal/GvqBnKhFgObvnSGkDsje.png",
               title: "模板可以区分",
               datetime: "一年前",
               description: "",
               type: "1"
             },
             {
-              avatar: "https://t7.baidu.com/it/u=1517419723,1472324058&fm=193&f=GIF",
+              avatar: "https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png",
               title: "左侧图标",
               datetime: "一年前",
               description: "",

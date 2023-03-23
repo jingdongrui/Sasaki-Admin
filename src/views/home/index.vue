@@ -2,7 +2,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { Warning } from "@element-plus/icons-vue";
 import { useThemeConfigStore } from "@/store/modules/themeConfig";
-import home1 from "@/icons/svg/home1.svg";
+import LineChart from "./components/LineChart.vue";
 
 const ThemeConfigStore = useThemeConfigStore();
 // 定义顶部卡片数据
@@ -15,47 +15,43 @@ const homeTopCardData = reactive([
     num1Str: "日销售额",
     num1: "9,234",
     icon: "home1"
+  },
+  {
+    numStr: "访问量",
+    num: "123,819",
+    rate1: "12%",
+    rate2: "9%",
+    num1Str: "日访问量",
+    num1: "9,234",
+    icon: "home2"
+  },
+  {
+    numStr: "支付笔数",
+    num: "381,111",
+    rate1: "12%",
+    rate2: "9%",
+    num1Str: "日支付笔数",
+    num1: "9,234",
+    icon: "home3"
+  },
+  {
+    numStr: "总用户数",
+    num: "985,658",
+    rate1: "12%",
+    rate2: "9%",
+    num1Str: "当前在线数",
+    num1: "19,234",
+    icon: "home4"
   }
-  // {
-  //   numStr: "访问量",
-  //   num: "123,819",
-  //   rate1: "12%",
-  //   rate2: "9%",
-  //   num1Str: "日访问量",
-  //   num1: "9,234",
-  //   icon: "home2"
-  // },
-  // {
-  //   numStr: "支付笔数",
-  //   num: "2,381,111",
-  //   rate1: "12%",
-  //   rate2: "9%",
-  //   num1Str: "日支付笔数",
-  //   num1: "9,234",
-  //   icon: "home3"
-  // },
-  // {
-  //   numStr: "总用户数",
-  //   num: "985,658",
-  //   rate1: "12%",
-  //   rate2: "9%",
-  //   num1Str: "当前在线数",
-  //   num1: "19,234",
-  //   icon: "home4"
-  // }
 ]);
-const rowFirstCardStyle = () => {
-  // return {
-  //   padding: "5px 15px"
-  // };
-};
+
 onMounted(() => {
   // console.log(home1);
 });
 </script>
 <template>
   <div class="home-container">
-    <el-row :gutter="10" class="row-first" v-for="i in 1">
+    <el-row :gutter="10" class="row-first">
       <el-col
         v-for="(item, index) in homeTopCardData"
         :key="index"
@@ -65,7 +61,7 @@ onMounted(() => {
         :lg="6"
         :xl="6"
       >
-        <el-card class="box-card" :body-style="rowFirstCardStyle()">
+        <el-card class="box-card">
           <div class="title">
             <span>{{ item.numStr }}</span> <el-icon><Warning /></el-icon>
           </div>
@@ -84,17 +80,24 @@ onMounted(() => {
         </el-card>
       </el-col>
     </el-row>
+    <el-row :gutter="10" class="row-two margin-top-5">
+      <el-col>
+        <el-card class="box-card"> <LineChart /> </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .home-container {
   padding: 10px;
+  box-sizing: border-box;
   // background-color: #d2ff9e;
   // background-image: url("@/assets/images/svg/home1.svg");
 
   .row-first {
     .box-card {
+      margin: 5px 0;
       .title {
         display: flex;
         justify-content: space-between;
