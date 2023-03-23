@@ -17,13 +17,13 @@ interface DataItem {
   value: number;
 }
 
-const lineChartRef = ref();
+const scatterChartRef = ref();
 let myChart: EChartsType;
 
 onMounted(async () => {
   await nextTick();
-  const lineChartDom = lineChartRef.value;
-  myChart = echarts.init(lineChartDom);
+  const scatterCharttDom = scatterChartRef.value;
+  myChart = echarts.init(scatterCharttDom);
   option && myChart.setOption(option);
 
   window.addEventListener("resize", () => {

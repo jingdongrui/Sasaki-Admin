@@ -3,6 +3,7 @@ import { ref, reactive, onMounted } from "vue";
 import { Warning } from "@element-plus/icons-vue";
 import { useThemeConfigStore } from "@/store/modules/themeConfig";
 import LineChart from "./components/LineChart.vue";
+import ScatterChart from "./components/ScatterChart.vue";
 
 const ThemeConfigStore = useThemeConfigStore();
 // 定义顶部卡片数据
@@ -83,6 +84,11 @@ onMounted(() => {
     <el-row :gutter="10" class="row-two margin-top-5">
       <el-col>
         <el-card class="box-card"> <LineChart /> </el-card>
+      </el-col>
+    </el-row>
+    <el-row :gutter="10" class="row-two margin-top-5">
+      <el-col>
+        <el-card class="box-card"> <ScatterChart /> </el-card>
       </el-col>
     </el-row>
   </div>
