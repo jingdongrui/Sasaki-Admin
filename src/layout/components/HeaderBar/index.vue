@@ -3,7 +3,7 @@ import { ref, reactive, onMounted } from "vue";
 import router from "@/router";
 import { Edit, Share, ArrowDown } from "@element-plus/icons-vue";
 import { useUserStore } from "@/store/modules/user";
-import { getUserNotice } from "@/api/user/index";
+import { getUserNotice } from "@/api/modules/user";
 import avat from "@/assets/images/avat.jpg";
 
 import Breadcrumb from "@/layout/components/HeaderBar/Breadcrumb.vue";

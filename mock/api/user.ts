@@ -1,6 +1,14 @@
 // https://github.com/vbenjs/vite-plugin-mock/blob/HEAD/README.zh_CN.md
 import { MockMethod } from "vite-plugin-mock";
 import Mock from "mockjs";
+const dataTest = (data: any, num: number) => {
+  let temp = [];
+  for (let i = 0; i < num; i++) {
+    let tem = data;
+    temp.push(tem);
+  }
+  return temp;
+};
 export default [
   // 登录
   {
@@ -55,7 +63,7 @@ export default [
               {
                 path: "/system/user",
                 name: "systemUser",
-                component: "/system/menu/index",
+                component: "/system/user/index",
                 meta: {
                   title: "用户管理",
                   icon: "ssk-user"
@@ -64,7 +72,7 @@ export default [
               {
                 path: "/system/department",
                 name: "systemDepartment",
-                component: "/system/role/index",
+                component: "/system/department/index",
                 meta: {
                   title: "部门管理",
                   icon: "ssk-team"
@@ -179,5 +187,43 @@ export default [
         }
       ]
     }
+  },
+  // 用户列表
+  {
+    url: "/api/user/getUserList",
+    method: "post",
+    timeout: 10,
+    response: {
+      code: 2000,
+      msg: "ok",
+      data: dataTest(
+        {
+          address: Mock.mock("@county(true)"),
+          avatar: "https://i.imgtg.com/2023/01/16/QRqMK.jpg",
+          createTime: Mock.mock("@datetime(yyyy-MM-dd HH:mm:ss)"),
+          email: Mock.mock("@email(gmail.com)"),
+          gender: Mock.mock("@interger(0,1)"),
+          id: Mock.mock("@increment(1)"),
+          idCard: "578586662413167864",
+          status: Mock.mock("@interger(0,1)"),
+          user: { detail: { age: 14 } },
+          username: Mock.mock("@cname")
+        },
+        10
+      )
+    }
   }
 ] as MockMethod[];
+
+// {
+//   address: Mock.mock("@county(true)"),
+//   avatar: "https://i.imgtg.com/2023/01/16/QRqMK.jpg",
+//   createTime: Mock.mock("@datetime(yyyy-MM-dd HH:mm:ss)"),
+//   email: Mock.mock("@email(gmail.com)"),
+//   gender: Mock.mock("@interger(0,1)"),
+//   id: Mock.mock("@increment(1)"),
+//   idCard: "578586662413167864",
+//   status: Mock.mock("@interger(0,1)"),
+//   user: { detail: { age: 14 } },
+//   username: Mock.mock("@cname")
+// }

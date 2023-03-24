@@ -81,13 +81,13 @@ onMounted(() => {
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="10" class="row-two margin-top-5">
+    <el-row :gutter="10" class="row-second margin-top-5">
       <el-col>
         <el-card class="box-card"> <LineChart /> </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="10" class="row-two margin-top-5">
-      <el-col>
+    <el-row :gutter="10" class="row-thirdly margin-top-5">
+      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <el-card class="box-card"> <ScatterChart /> </el-card>
       </el-col>
     </el-row>
@@ -98,8 +98,6 @@ onMounted(() => {
 .home-container {
   padding: 10px;
   box-sizing: border-box;
-  // background-color: #d2ff9e;
-  // background-image: url("@/assets/images/svg/home1.svg");
 
   .row-first {
     .box-card {

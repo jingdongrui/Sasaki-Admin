@@ -6,3 +6,5 @@ export const getUserInfo = (data?: Object) =>
   request({ url: "/api/user/getUserInfo", method: "POST", data });
 export const getUserNotice = (data?: Object): Promise<NoticeType.NoticePromise> =>
   request({ url: "/api/user/getUserNotice", method: "POST", data });
+export const getUserList = (data?: Object): Promise<any> =>
+  request({ url: "/api/user/getUserList", method: "POST", data });

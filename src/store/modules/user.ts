@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { UserState } from "@/type/store";
-import { getLogin, getUserInfo } from "@/api/user/index";
+import { getLogin, getUserInfo } from "@/api/modules/user";
 import Cookies from "js-cookie";
 import { getFlatArr } from "@/utils/tools";
 
