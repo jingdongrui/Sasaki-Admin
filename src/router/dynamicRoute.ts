@@ -43,9 +43,3 @@ export const initDynamicRouter = async (token: string) => {
 
   // console.log("路由挂载好了");
 };
-const ttt = (path: string) => {
-  let arr = path.split("/");
-  arr.splice(0, 1);
-
-  return arr;
-};
