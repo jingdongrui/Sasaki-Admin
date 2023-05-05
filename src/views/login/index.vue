@@ -40,7 +40,7 @@
 import "./index.scss";
 import { reactive, onMounted } from "vue";
 import { useUserStore } from "@/store/modules/user";
-import router from "@/router";
+import router from "@/router/index";
 import Cookies from "js-cookie";
 import { User, Lock } from "@element-plus/icons-vue";
 
@@ -52,19 +52,15 @@ const state = reactive({
   },
   loginLoading: false
 });
+const UserStore = useUserStore();
 
-onMounted(() => {
-  // 清除token
-  Cookies.remove("ssk-token");
-});
+onMounted(() => {});
 
 const handLogin = () => {
   state.loginLoading = true;
-  const login = useUserStore();
-  login.login_store(state.ruleForm).then(data => {
-    console.log(122);
-    router.push("/home");
+  UserStore.login_store(state.ruleForm).then(data => {
     state.loginLoading = false;
+    router.push("/");
   });
 };
 </script>

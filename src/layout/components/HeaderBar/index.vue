@@ -44,7 +44,7 @@ const handLogout = () => {
       <el-dropdown trigger="click">
         <span class="el-dropdown-link user">
           <el-avatar size="small" :src="avat" />
-          {{ UserStore.userinfo.name }}
+          {{ UserStore.userInfo.name }}
           <el-icon class="el-icon--right">
             <arrow-down />
           </el-icon>

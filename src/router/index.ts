@@ -13,10 +13,12 @@ const router = createRouter({
 // 白名单
 const whiteList: Array<String> = [];
 // console.log(UserStore.menuList);
-
+// const UserStore = useUserStore();
 router.beforeEach(async (to, from, next) => {
   // console.log("进入路由守卫");
-  const token = Cookies.get("ssk-token");
+  const UserStore = useUserStore();
+
+  const token = UserStore.accessToken;
 
   if (to.path === "/login") {
     // if (token) {
@@ -30,48 +32,48 @@ router.beforeEach(async (to, from, next) => {
 
   // 白名单放行
   if (whiteList.includes(to.path)) return next();
+  console.log(router.getRoutes());
 
-  // 通过菜单动态添加路由
-  const UserStore = useUserStore();
-  // await UserStore.getUserInfo(Cookies.get("ssk-token") as string);
-  // 菜单列表没有数据时，重新初始化菜单
-  if (!UserStore.menuList.length) {
-    // console.log("开始挂载异步路由");
-    // console.log("not have menuList");
-    await initDynamicRouter(token);
-    return next({ ...to, replace: true });
+  if (UserStore.menuList.length !== 0) {
+    // 动态添加路由
+    if (router.getRoutes().length === staticRoute.length) {
+      // console.log("开始挂载异步路由");
+      // console.log("not have menuList");
+      await initDynamicRouter(token);
+      return next({ ...to, replace: true });
+    }
   }
+
   // console.log("公共路由");
 
   next();
 });
 
-/**
- * @description 重置路由
- * */
-export const resetRouter = () => {
-  const authStore = useUserStore();
-  authStore.flatMenuListGetter.forEach(route => {
-    const { name } = route;
-    if (name && router.hasRoute(name)) router.removeRoute(name);
-  });
-};
-/**
- * 筛选出能够访问的路由
- * @param {Array} requestMenuList 后端请求到的菜单
- * @param {Array} asyncRoutes 本地写好的路由
- * @returns 有权限访问的路由表
- */
-const test = (requestMenuList: {}[], asyncRoutes: RouteRecordRaw[]) => {
-  //扁平化请求到的路由
-  const menuList = treeToArray(requestMenuList);
-  console.log("menuList", menuList);
-};
+// /**
+//  * @description 重置路由
+//  * */
+// export const resetRouter = () => {
+//   UserStore.flatMenuListGetter.forEach(route => {
+//     const { name } = route;
+//     if (name && router.hasRoute(name)) router.removeRoute(name);
+//   });
+// };
+// /**
+//  * 筛选出能够访问的路由
+//  * @param {Array} requestMenuList 后端请求到的菜单
+//  * @param {Array} asyncRoutes 本地写好的路由
+//  * @returns 有权限访问的路由表
+//  */
+// const test = (requestMenuList: {}[], asyncRoutes: RouteRecordRaw[]) => {
+//   //扁平化请求到的路由
+//   const menuList = treeToArray(requestMenuList);
+//   console.log("menuList", menuList);
+// };
 
-function flatten(arr: any) {
-  return arr.reduce((flat: any, toFlatten: any) => {
-    return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
-  }, []);
-}
+// function flatten(arr: any) {
+//   return arr.reduce((flat: any, toFlatten: any) => {
+//     return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+//   }, []);
+// }
 
 export default router;

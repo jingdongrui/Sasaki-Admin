@@ -19,20 +19,8 @@ export default [
       code: 2000,
       msg: "ok",
       data: {
-        access_token: Mock.mock("@word(24)")
-      }
-    }
-  },
-  // 用户信息
-  {
-    url: "/api/user/getUserInfo",
-    method: "post",
-    timeout: 10,
-    response: {
-      code: 2000,
-      msg: "ok",
-      data: {
-        user_info: {
+        accessToken: Mock.mock("@word(24)"),
+        userInfo: {
           id: new Date(),
           name: Mock.mock("@cname"), // 中文名称
           age: Mock.mock("@natural( 18, 80 )"), // 18至28以内随机整数, 0只是用来确定类型

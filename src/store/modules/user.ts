@@ -1,45 +1,49 @@
 import { defineStore } from "pinia";
-import { UserState } from "@/type/store";
-import { getLogin, getUserInfo } from "@/api/modules/user";
-import Cookies from "js-cookie";
+import { getLogin } from "@/api/modules/user";
+import { Login } from "@/api/interface/index";
 import { getFlatArr } from "@/utils/tools";
+import router from "@/router/index";
+
+const files = import.meta.glob("@/views/**/*.vue");
 
 export const useUserStore = defineStore({
   id: "user",
-  state: (): UserState => ({
-    userinfo: {
+  state: () => ({
+    userInfo: {
       name: ""
     },
-    menuList: []
+    menuList: [] as any[],
+    accessToken: ""
   }),
   getters: {
     // 数组,扁平化后的菜单列表
     flatMenuListGetter: state => getFlatArr(state.menuList)
   },
   actions: {
-    login_store(data: any) {
+    login_store(data: Login.ReqLogin) {
       return new Promise(resolve => {
         getLogin(data).then(result => {
-          // 设置 cookies 半个小时过期
-          Cookies.set("ssk-token", result.data.access_token, {
-            expires: new Date(new Date().getTime() + 60 * 60 * 1000 * 24 * 7)
-          });
-          resolve(result);
-        });
-      });
-    },
-    getUserInfo(token: string) {
-      return new Promise((resolve, reject) => {
-        getUserInfo(token).then(result => {
-          if (result.code == 9000) {
-            reject("验证失败！请重新登录");
-          }
-          const { menusList, user_info } = result.data;
-          this.menuList = menusList;
-          this.userinfo = user_info;
+          this.accessToken = result.data.accessToken;
+          this.menuList = result.data.menusList;
+          this.userInfo = result.data.userInfo;
+
+          // // 生成可访问的路由
+          // // 动态添加路由
+          // this.flatMenuListGetter.forEach((item: any) => {
+          //   // item 为已经扁平化的数组，所以需要删除children
+          //   item.children && delete item.children;
+          //   // 拼接 component 形成正确的route项
+          //   if (item.component) {
+          //     item.component = files["/src/views" + item.component + ".vue"];
+          //   }
+          //   router.addRoute("layout", item);
+          // });
+
           resolve(result);
         });
       });
     }
-  }
+  },
+  // 持久化
+  persist: true
 });

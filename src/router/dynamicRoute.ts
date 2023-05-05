@@ -18,7 +18,7 @@ export const initDynamicRouter = async (token: string) => {
   const UserStore = useUserStore();
 
   // 从后端获取菜单列表
-  await UserStore.getUserInfo(token);
+  // await UserStore.getUserInfo(token);
 
   // 动态添加路由
   UserStore.flatMenuListGetter.forEach((item: any) => {
@@ -28,15 +28,6 @@ export const initDynamicRouter = async (token: string) => {
     if (item.component) {
       item.component = files["/src/views" + item.component + ".vue"];
     }
-
-    // let pathArr = ttt(item.path);
-    // console.log("a", pathArr);
-
-    // if (pathArr.length == 1) {
-    //   router.addRoute("layout", item);
-    // }else{
-
-    // }
 
     router.addRoute("layout", item);
   });
