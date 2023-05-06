@@ -19,6 +19,7 @@ export const initDynamicRouter = async (token: string) => {
 
   // 从后端获取菜单列表
   // await UserStore.getUserInfo(token);
+  // console.log(1212);
 
   // 动态添加路由
   UserStore.flatMenuListGetter.forEach((item: any) => {

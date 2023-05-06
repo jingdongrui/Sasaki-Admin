@@ -32,11 +32,12 @@ router.beforeEach(async (to, from, next) => {
 
   // 白名单放行
   if (whiteList.includes(to.path)) return next();
-  console.log(router.getRoutes());
 
-  if (UserStore.menuList.length !== 0) {
+  if (router.getRoutes().length === staticRoute.length) {
     // 动态添加路由
-    if (router.getRoutes().length === staticRoute.length) {
+    if (UserStore.menuList.length !== 0) {
+      // 说明路由未挂载
+
       // console.log("开始挂载异步路由");
       // console.log("not have menuList");
       await initDynamicRouter(token);

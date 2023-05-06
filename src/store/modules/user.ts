@@ -27,17 +27,17 @@ export const useUserStore = defineStore({
           this.menuList = result.data.menusList;
           this.userInfo = result.data.userInfo;
 
-          // // 生成可访问的路由
-          // // 动态添加路由
-          // this.flatMenuListGetter.forEach((item: any) => {
-          //   // item 为已经扁平化的数组，所以需要删除children
-          //   item.children && delete item.children;
-          //   // 拼接 component 形成正确的route项
-          //   if (item.component) {
-          //     item.component = files["/src/views" + item.component + ".vue"];
-          //   }
-          //   router.addRoute("layout", item);
-          // });
+          // 生成可访问的路由
+          // 动态添加路由
+          this.flatMenuListGetter.forEach((item: any) => {
+            // item 为已经扁平化的数组，所以需要删除children
+            item.children && delete item.children;
+            // 拼接 component 形成正确的route项
+            if (item.component) {
+              item.component = files["/src/views" + item.component + ".vue"];
+            }
+            router.addRoute("layout", item);
+          });
 
           resolve(result);
         });
