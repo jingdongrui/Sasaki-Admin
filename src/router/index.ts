@@ -14,6 +14,7 @@ const router = createRouter({
 const whiteList: Array<String> = [];
 // console.log(UserStore.menuList);
 // const UserStore = useUserStore();
+console.log(12);
 router.beforeEach(async (to, from, next) => {
   // console.log("进入路由守卫");
   const UserStore = useUserStore();
@@ -33,11 +34,11 @@ router.beforeEach(async (to, from, next) => {
   // 白名单放行
   if (whiteList.includes(to.path)) return next();
 
+  // console.log(router.getRoutes().length === staticRoute.length);
+
   if (router.getRoutes().length === staticRoute.length) {
     // 动态添加路由
     if (UserStore.menuList.length !== 0) {
-      // 说明路由未挂载
-
       // console.log("开始挂载异步路由");
       // console.log("not have menuList");
       await initDynamicRouter(token);

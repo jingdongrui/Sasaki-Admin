@@ -9,9 +9,7 @@ const files = import.meta.glob("@/views/**/*.vue");
 export const useUserStore = defineStore({
   id: "user",
   state: () => ({
-    userInfo: {
-      name: ""
-    },
+    userInfo: {},
     menuList: [] as any[],
     accessToken: ""
   }),
@@ -42,6 +40,11 @@ export const useUserStore = defineStore({
           resolve(result);
         });
       });
+    },
+    clearAll() {
+      this.accessToken = "";
+      this.menuList = [];
+      this.userInfo = {};
     }
   },
   // 持久化

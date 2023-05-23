@@ -14,7 +14,7 @@ export default [
   {
     url: "/api/user/login",
     method: "post",
-    timeout: 2000,
+    timeout: 500,
     response: {
       code: 2000,
       msg: "ok",
@@ -75,10 +75,10 @@ export default [
             redirect: "/components/component1",
             children: [
               {
-                path: "/components/component1",
-                name: "componentsComponent1",
-                meta: { title: "component1", icon: "ssk-HTML" },
-                component: "/system/role/index"
+                path: "/components/CountTo",
+                name: "CountTo",
+                meta: { title: "CountTo", icon: "ssk-HTML" },
+                component: "/components/CountTo"
               },
               {
                 path: "/components/component2",

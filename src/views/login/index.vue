@@ -54,7 +54,9 @@ const state = reactive({
 });
 const UserStore = useUserStore();
 
-onMounted(() => {});
+onMounted(() => {
+  UserStore.clearAll();
+});
 
 const handLogin = () => {
   state.loginLoading = true;
