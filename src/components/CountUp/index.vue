@@ -1,13 +1,38 @@
 <template>
-  <span ref="countUpRef">qqqqqqqqqqqqqq{{ props.startVal }}</span>
+  <span ref="countUpRef"></span>
 </template>
 
 <script lang="ts" setup>
-import { CountUp } from "countup.js";
+import { CountUp, CountUpOptions } from "countup.js";
 import { ref, watch, onBeforeMount, onMounted } from "vue";
+import type { PropType } from "vue";
+console.log("子组件setup");
 
 const countUpRef = ref();
 const amount = ref(0);
+
+/** interface CountUpOptions {
+    startVal?: number;
+    decimalPlaces?: number;
+    duration?: number;
+    useGrouping?: boolean;
+    useIndianSeparators?: boolean;
+    useEasing?: boolean;
+    smartEasingThreshold?: number;
+    smartEasingAmount?: number;
+    separator?: string;
+    decimal?: string;
+    easingFn?: (t: number, b: number, c: number, d: number) => number;
+    formattingFn?: (n: number) => string;
+    prefix?: string;
+    suffix?: string;
+    numerals?: string[];
+    enableScrollSpy?: boolean;
+    scrollSpyDelay?: number;
+    scrollSpyOnce?: boolean;
+    onCompleteCallback?: () => any;
+    plugin?: CountUpPlugin;
+}*/
 
 const props = defineProps({
   // 结束值
@@ -15,49 +40,22 @@ const props = defineProps({
     type: Number,
     default: 0
   },
-  // 开始值
-  startVal: {
-    type: Number,
-    default: 0
-  },
-  // 小数位数
-  decimalPlaces: {
-    type: Number,
-    default: 0
-  },
-  /**
-   * 持续时间
-   */
-  duration: {
-    type: Number,
-    default: 2
+  options: {
+    type: Object as PropType<CountUpOptions>
   }
-});
-
-onBeforeMount(() => {
-  console.log("onBeforeMount");
-});
-onMounted(() => {
-  console.log("子组件onMounted");
 });
 
 const initCountUp = () => {
-  const countUp = new CountUp(countUpRef.value, amount.value, {
-    startVal: props.startVal,
-    decimalPlaces: props.decimalPlaces,
-    duration: props.duration
-  });
+  const countUp = new CountUp(countUpRef.value, props.endVal, props.options);
   countUp.start();
-  console.log(countUp);
 };
 
 watch(
-  () => props.endVal,
+  [() => props.endVal, () => props.options],
   () => {
-    console.log(99999);
-    console.log(props);
-    amount.value = props.endVal;
+    console.log("object");
     initCountUp();
-  }
+  },
+  { deep: true }
 );
 </script>

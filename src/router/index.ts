@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import { staticRoute } from "@/router/staticRoute";
+import { staticRoutes } from "@/router/staticRoutes";
 import { useUserStore } from "@/store/modules/user";
+
 import { useTagNavStore } from "@/store/modules/tagNav";
 import { treeToArray } from "@/utils/tools";
 import { initDynamicRouter } from "@/router/dynamicRoute";
@@ -8,13 +9,11 @@ import Cookies from "js-cookie";
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes: [...staticRoute]
+  routes: [...staticRoutes]
 });
 // 白名单
 const whiteList: Array<String> = [];
-// console.log(UserStore.menuList);
-// const UserStore = useUserStore();
-console.log(12);
+
 router.beforeEach(async (to, from, next) => {
   // console.log("进入路由守卫");
   const UserStore = useUserStore();
@@ -36,15 +35,15 @@ router.beforeEach(async (to, from, next) => {
 
   // console.log(router.getRoutes().length === staticRoute.length);
 
-  if (router.getRoutes().length === staticRoute.length) {
-    // 动态添加路由
-    if (UserStore.menuList.length !== 0) {
-      // console.log("开始挂载异步路由");
-      // console.log("not have menuList");
-      await initDynamicRouter(token);
-      return next({ ...to, replace: true });
-    }
-  }
+  // if (router.getRoutes().length === staticRoute.length) {
+  //   // 动态添加路由
+  //   if (UserStore.menuList.length !== 0) {
+  //     // console.log("开始挂载异步路由");
+  //     // console.log("not have menuList");
+  //     await initDynamicRouter(token);
+  //     return next({ ...to, replace: true });
+  //   }
+  // }
 
   // console.log("公共路由");
 

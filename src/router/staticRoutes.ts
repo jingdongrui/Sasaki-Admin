@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from "vue-router";
+import { dynamicRoutes } from "./dynamicRoutes";
 
-export const staticRoute: Array<RouteRecordRaw> = [
+export const staticRoutes: Array<RouteRecordRaw> = [
   {
     path: "/",
     redirect: "/home"
@@ -19,7 +20,20 @@ export const staticRoute: Array<RouteRecordRaw> = [
     name: "layout",
     component: () => import("@/layout/index.vue"),
     redirect: "/home",
-    children: []
+    children: [
+      {
+        path: "/home",
+        name: "home",
+        component: () => import("@/views/home/index.vue"),
+        meta: {
+          title: "首页",
+          icon: "ssk-home",
+          activeItem: true,
+          isAffix: true
+        }
+      },
+      ...dynamicRoutes
+    ]
   },
 
   // error page
